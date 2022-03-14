@@ -26,9 +26,9 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-8 col-md-10 col-lg-8 mx-auto">
-        <div class="card border-0 shadow-sm rounded-3 my-5 bg-dark text-primary">
+        <div class="card border-0 shadow-md rounded-3 my-5 bg-light text-primary">
           <div class="card-body p-4 p-sm-5">
-            <h5 class="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
+            <h5 class="card-title text-center mb-5 fw-light fs-5">Administrator Login Form</h5>
             <form action="" method="POST">
               <?php if (session()->getFlashdata('ersuccessror')) : ?>
                 <div class=" alert alert-success" role="alert">
@@ -50,7 +50,7 @@
               <?php endif ?>
               <div class="mb-3">
                 <label for="InputEmail">Email address</label>
-                <input type="email" value="<?= session()->getFlashdata('email')?>" name="inputEmail" class="form-control" id="inputEmail" placeholder="example@example.com">
+                <input type="email" value="<?= session()->getFlashdata('email') ?>" name="inputEmail" class="form-control" id="inputEmail" placeholder="example@example.com">
               </div>
               <div class="mb-3">
                 <label for="InputPassword">Password</label>
@@ -60,7 +60,6 @@
                 <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Login" name="login">
               </div>
             </form>
-            <a href="/register" class="d-block text-right text-decoration-none mt-3">Register Dek!!!</a>
           </div>
         </div>
       </div>

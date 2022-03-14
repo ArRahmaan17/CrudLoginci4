@@ -23,7 +23,7 @@ class Home extends BaseController
         if ($login) {
             $email = $this->request->getVar('inputEmail');
             $password = $this->request->getVar('inputPassword');
-            $dataLogin =  $this->pegawai->where('email', $email)->first();
+            $dataLogin =  $this->pegawai->where(['email' => $email, 'role' => 'Admin'])->first();
             if ($dataLogin == null) {
                 $error = "Email Tidak Tersedia";
                 $session->setFlashdata('error', $error);
@@ -34,21 +34,8 @@ class Home extends BaseController
                 $session->setFlashdata('error', $error);
                 return redirect()->to('/');
             } else {
-                // if ($dataLogin['status_login'] == '0') {
-                //     $dataupdate = array(
-                //         'id' => $dataLogin['id'],
-                //         'status_login' => '1',
-                //     );
-                //     $this->pegawai->save($dataupdate);
-                    $dataSesiPegawai = [
-                        'id' => $dataLogin['id'],
-                        'nama' => $dataLogin['nama'],
-                        'email' => $dataLogin['email'],
-                        'role' => $dataLogin['role'],
-                    ];
-                    $session->set($dataSesiPegawai);
-                    return redirect()->to('/datapegawai');
-                // }
+                $session->set($dataLogin);
+                return redirect()->to('datapegawai/');
             }
         }
         return view('login_view', [

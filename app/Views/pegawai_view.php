@@ -19,6 +19,7 @@
 
 <body>
   <?= $this->include('navbar'); ?>
+  <!-- card data pegawai -->
   <div class="container mt-5">
     <div class="card">
       <div class="card-header">
@@ -27,9 +28,10 @@
       <div class="card-body">
         <div class="col-4 my-4">
           Current Admin Active : <?= session()->get('nama') ?>
+          Current Admin Active : <?= session()->get('role') ?>
         </div>
         <!-- modal tambah edit pegawai -->
-        <?php if (session()->get('role') == 'manager') : ?>
+        <?php if (session()->get('role') == 'Staff') : ?>
           <a class="btn btn-primary <?= 'disabled' ?>" <?= 'aria-disabled="true"' ?> data-bs-toggle="modal" href="#exampleModalToggle" role="button">Tambah Data Pegawai</a>
         <?php else : ?>
           <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Tambah Data Pegawai</a>
@@ -38,7 +40,7 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel">Form Input Data Pegawai</h5>
+                <h5 class="modal-title" id="exampleModalToggleLabel">Form Data Pegawai</h5>
                 <button type="button" class="btn-close tombol-tutup" data-bs-dismiss="modal" onclick="bersihkan()" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -46,7 +48,7 @@
                 </div>
                 <div class=" alert alert-danger error" role="alert" style="display: none;">
                 </div>
-                <input type="hidden" id="inputId">
+                <input type="text" id="inputId">
                 <div class="mb-3 row">
                   <label for="inputNama" class="col-sm-6 col-form-label">Nama</label>
                   <div class="col-sm-12">
@@ -62,22 +64,22 @@
                 <div class="mb-3 row">
                   <label for="inputPassword" class="col-sm-6 col-form-label">Password</label>
                   <div class="col-sm-12">
-                    <input type="password" maxlength="50" minlength="5" class="form-control" id="inputPassword">
+                    <input type="text" maxlength="50" minlength="5" class="form-control" id="inputPassword">
                   </div>
                 </div>
                 <div class="mb-3 row">
                   <label for="inputPassword" class="col-sm-6 col-form-label">Confirm Password</label>
                   <div class="col-sm-12">
-                    <input type="password" maxlength="50" minlength="5" class="form-control" id="inputPasswordcf">
+                    <input type="text" maxlength="50" minlength="5" class="form-control" id="inputPasswordcf">
                   </div>
                 </div>
                 <div class="mb-3 row">
                   <label for="inputBidang" class="col-sm-6 col-form-label">Bidang</label>
                   <div class="col-sm-12">
                     <select class="form-select" name="bidang" id="inputBidang">
-                      <option value="finance">Finance</option>
-                      <option value="marketing">Marketing</option>
-                      <option value="hr">HR</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Marketing">Marketing</option>
+                      <option value="Hr">HR</option>
                     </select>
                   </div>
                 </div>
@@ -91,8 +93,8 @@
                   <label for="inputBidang" class="col-sm-6 col-form-label">Role</label>
                   <div class="col-sm-12">
                     <select class="form-select" name="role" id="inputRole">
-                      <option value="staff">Staff</option>
-                      <option value="manager">Manager</option>
+                      <option value="Staff">Staff</option>
+                      <option value="Admin">Admin</option>
                     </select>
                   </div>
                 </div>
@@ -149,101 +151,106 @@
         echo $link;
         ?>
       </div>
-      <!-- Optional JavaScript; choose one of the two! -->
+    </div>
+    <!-- Optional JavaScript; choose one of the two! -->
 
-      <!-- Option 1: Bootstrap Bundle with Popper -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-      <script>
-        $('.tombol-tutup').on('click', function() {
-          if ($('.sukses').is('visible')) {
-            window.location.href = "<?= current_url() . "?" . $_SERVER['QUERY_STRING']  ?>";
-          }
-          $('.alert').hide();
-          bersihkan();
-        })
-
-        function hapus($id) {
-          var result = confirm("Yakin Mau Hapus data yang berid = " + $id);
-          if (result) {
-            window.location = "<?= base_url('Pegawai/hapus') ?>/" + $id
-          }
+    <script>
+      $('.tombol-tutup').on('click', function() {
+        if ($('.sukses').is('visible')) {
+          window.location.href = "<?= current_url() . "?" . $_SERVER['QUERY_STRING']  ?>";
         }
+        $('.alert').hide();
+        bersihkan();
+      })
 
-        function edit($id) {
+      function hapus($id) {
+        var result = confirm("Yakin Mau Hapus data yang berid = " + $id);
+        if (result) {
+          window.location = "<?= base_url('Pegawai/hapus') ?>/" + $id
+        }
+      }
+
+      function edit($id) {
+        $.ajax({
+          url: "<?= base_url('Pegawai/edit') ?>/" + $id,
+          type: "GET",
+          success: function(hasil) {
+            var $hasilobj = $.parseJSON(hasil);
+            if ($hasilobj.id != null) {
+              $('#inputId').val($hasilobj.id);
+              $('#inputNama').val($hasilobj.nama);
+              $('#inputEmail').val($hasilobj.email);
+              $('#inputPassword').val($hasilobj.password);
+              $('#inputPasswordcf').val($hasilobj.password);
+              $('#inputBidang').val($hasilobj.bidang);
+              $('#inputAlamat').val($hasilobj.alamat);
+              $('#inputRole').val($hasilobj.role);
+            }
+          }
+        });
+      }
+
+      function bersihkan() {
+        $('inputId').val('');
+        $('#inputNama').val('');
+        $('#inputEmail').val('');
+        $('#inputAlamat').val('');
+        $('#inputUsername').val('');
+        $('#inputPassword').val('');
+        $('#inputPasswordcf').val('');
+        $('#inputRole').val('');
+      }
+
+      $('#tombolSimpan').on('click', function() {
+        var $id = $('#inputId').val();
+        var $nama = $('#inputNama').val();
+        var $email = $('#inputEmail').val();
+        var $password = $('#inputPassword').val();
+        var $cfpassword = $('#inputPasswordcf').val();
+        var $bidang = $('#inputBidang').val();
+        var $alamat = $('#inputAlamat').val();
+        var $role = $('#inputRole').val();
+
+        if ($password == $cfpassword) {
           $.ajax({
-            url: "<?= base_url('Pegawai/edit') ?>/" + $id,
-            type: "GET",
+            url: "<?= base_url('Pegawai/simpan') ?>",
+            type: "POST",
+            data: {
+              'id': $id,
+              'nama': $nama,
+              'email': $email,
+              'password': $password,
+              'cfpassword': $cfpassword,
+              'bidang': $bidang,
+              'alamat': $alamat,
+              'role': $role
+            },
             success: function(hasil) {
-              var $hasilobj = $.parseJSON(hasil);
-              if ($hasilobj.id != null) {
-                $('#inputId').val($hasilobj.id);
-                $('#inputNama').val($hasilobj.nama);
-                $('#inputEmail').val($hasilobj.email);
-                $('#inputPassword').val($hasilobj.password);
-                $('#inputPasswordcf').val($hasilobj.password);
-                $('#inputBidang').val($hasilobj.bidang);
-                $('#inputAlamat').val($hasilobj.alamat);
+              $hasilobj = $.parseJSON(hasil);
+              if ($hasilobj.status == true) {
+                $('.error').hide();
+                $('.sukses').html($hasilobj.pesan);
+                $('.sukses').show();
+                bersihkan();
+                window.location = "<?= base_url() ?>";
+              } else {
+                $('.sukses').hide();
+                $('.error').html($hasilobj.pesan);
+                $('.error').show();
               }
             }
           });
+        } else {
+          $('.sukses').hide();
+          $('.error').html("Password dan confirm Password Tidak Sama");
+          $('.error').show();
         }
-
-        function bersihkan() {
-          $('inputId').val('');
-          $('#inputNama').val('');
-          $('#inputEmail').val('');
-          $('#inputAlamat').val('');
-          $('#inputUsername').val('');
-          $('#inputPassword').val('');
-        }
-
-        $('#tombolSimpan').on('click', function() {
-          var $id = $('#inputId').val();
-          var $nama = $('#inputNama').val();
-          var $email = $('#inputEmail').val();
-          var $password = $('#inputPassword').val();
-          var $cfpassword = $('#inputPasswordcf').val();
-          var $bidang = $('#inputBidang').val();
-          var $alamat = $('#inputAlamat').val();
-          var $role = $('#inputRole').val();
-
-          if ($password == $cfpassword) {
-            $.ajax({
-              url: "<?= base_url('Pegawai/simpan') ?>",
-              type: "POST",
-              data: {
-                'id': $id,
-                'nama': $nama,
-                'email': $email,
-                'password': $password,
-                'cfpassword': $cfpassword,
-                'bidang': $bidang,
-                'alamat': $alamat,
-              },
-              success: function(hasil) {
-                $hasilobj = $.parseJSON(hasil);
-                if ($hasilobj.status == true) {
-                  $('.error').hide();
-                  $('.sukses').html($hasilobj.pesan);
-                  $('.sukses').show();
-                  bersihkan();
-                  window.location = "<?= base_url() ?>";
-                } else {
-                  $('.sukses').hide();
-                  $('.error').html($hasilobj.pesan);
-                  $('.error').show();
-                }
-              }
-            });
-          } else {
-            $('.sukses').hide();
-            $('.error').html("Password dan confirm Password Tidak Sama");
-            $('.error').show();
-          }
-        });
-      </script>
+      });
+    </script>
 </body>
 
 </html>

@@ -29,36 +29,38 @@ class Pegawai extends BaseController
         $aturan = [
             'nama' => [
                 'label' => 'Nama',
-                'rules' => 'required|min_length[8]|max_length[50]',
+                'rules' => 'required|min_length[5]|max_length[50]',
                 'errors' => [
                     'required' => 'Kolom {field} Harus Di isi',
-                    'min_length' => 'Minimal karakter yang di isikan di Kolom {field} adalah 8',
+                    'min_length' => 'Minimal karakter yang di isikan di Kolom {field} adalah 5',
                     'max_length' => 'Maximal karakter yang di isikan di Kolom {field} adalah 50',
                 ]
             ],
             'email' => [
                 'label' => 'Email',
-                'rules' => 'valid_email|min_length[8]|max_length[50]',
+                'rules' => 'valid_email|min_length[5]|max_length[50]|is_unique[pegawai.email]',
                 'errors' => [
                     'valid_email' => 'Kolom {field} Harus Format Email',
-                    'min_length' => 'Minimal karakter yang di isikan di Kolom {field} adalah 8',
+                    'min_length' => 'Minimal karakter yang di isikan di Kolom {field} adalah 5',
                     'max_length' => 'Maximal karakter yang di isikan di Kolom {field} adalah 50',
+                    'is_unique' => '{field} Sudah Terdaftar Mohon Cek Kembali'
                 ]
             ],
             'password' => [
                 'label' => 'Password',
-                'rules' => 'required|min_length[8]',
+                'rules' => 'required|min_length[5]|max_length[50]',
                 'errors' => [
                     'required' => 'Kolom {field} Harus Di isi',
-                    'min_length' => 'Minimal karakter yang di isikan di Kolom {field} adalah 8',
+                    'min_length' => 'Minimal karakter yang di isikan di Kolom {field} adalah 5',
+                    'max_length' => 'Maximal karakter yang di isikan di Kolom {field} adalah 50'
                 ]
             ],
             'alamat' => [
                 'label' => 'Alamat',
-                'rules' => 'required|min_length[8]|max_length[50]',
+                'rules' => 'required|min_length[5]|max_length[50]',
                 'errors' => [
                     'required' => 'Kolom {field} Harus Di isi',
-                    'min_length' => 'Minimal karakter yang di isikan di Kolom {field} adalah 8',
+                    'min_length' => 'Minimal karakter yang di isikan di Kolom {field} adalah 5',
                     'max_length' => 'Maximal karakter yang di isikan di Kolom {field} adalah 50',
                 ]
             ]
@@ -66,11 +68,22 @@ class Pegawai extends BaseController
         $validation->setRules($aturan);
 
         if ($validation->withRequest($this->request)->run()) {
+
+            $datacheck = $this->pegawai->where('id', $this->request->getPost('id'))->first();
+            if (empty($datacheck)) {
+                $password = md5($this->request->getPost('password'));
+            } else {
+                if ($datacheck['password'] == $this->request->getPost('password')) {
+                    $password = $this->request->getPost('password');
+                } else {
+                    $password = md5($this->request->getPost('password'));
+                }
+            }
             $data = [
                 'id' => $this->request->getPost('id'),
                 'nama' => $this->request->getPost('nama'),
                 'email' => $this->request->getPost('email'),
-                'password' => md5($this->request->getPost('password')),
+                'password' => $password,
                 'bidang' => $this->request->getPost('bidang'),
                 'alamat' => $this->request->getPost('alamat'),
                 'role' => $this->request->getPost('role'),
