@@ -39,17 +39,4 @@ class ModelPegawai extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function cari($keyword)
-    {
-        $builder = $this->table('pegawai');
-        $arr_keyword = explode(" ", $keyword);
-        for ($x = 0; $x < count($arr_keyword); $x++) {
-            $builder->orLike('nama', $arr_keyword[$x]);
-            $builder->orLike('alamat', $arr_keyword[$x]);
-            $builder->orLike('email', $arr_keyword[$x]);
-            $builder->orLike('bidang', $arr_keyword[$x]);
-        }
-        return $builder;
-    }
 }

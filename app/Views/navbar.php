@@ -2,11 +2,10 @@
   <div class="container-sm">
     <form action="" method="get">
       <div class="input-group">
-        <input type="text" class="form-control" autocomplete="off" name="keyword" placeholder="Masukan Keyword pencarian" aria-label="Masukan Keyword pencarian" aria-describedby="button-addon2">
+        <input type="text" class="form-control" autocomplete="off" name="keyword" placeholder="Sekarang Jam <?= session()->get('jam') ?>" aria-label="Masukan Keyword pencarian" aria-describedby="button-addon2">
         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Button</button>
       </div>
     </form>
-
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,21 +15,36 @@
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item dropup">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown10" data-bs-toggle="dropdown" aria-expanded="false">Dropup</a>
-          <ul class="dropdown-menu" aria-labelledby="dropdown10">
-            <li><a class="dropdown-item" href="#">New Pegawai</a></li>
-            <li><a class="dropdown-item" href="#">Update</a></li>
-            <li><a class="dropdown-item" href="#">Logout</a></li>
+          <a class="nav-link dropdown-toggle" href="#" id="admin" data-bs-toggle="dropdown" aria-expanded="false"><?= session()->get('nama') ?> </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="admin">
+            <li>
+              <h3 class="dropdown-header">Admin Fitur </h3>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" href="#createModal" role="button">New Pegawai</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" href="#updateModal" role="button" onclick="edit(<?= session()->get('id') ?>)">Update Profile</a></li>
+            <li><a class="dropdown-item" href="/Home/logout">Logout</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link">Disabled</a>
+        <li class="nav-item dropup" id="pegawai">
+          <span class="nav-link dropdown-toggle" href="#" id="toggel" data-bs-toggle="dropdown" aria-expanded="true">Pegawai Online</span>
+          <div class="dropdown-menu dropdown-menu-dark p-4" id="datapegawaionline" style="max-width: 400px;" aria-labelledby="pegawai">
+            <p class="text-truncate">
+              Staff Yang Online
+            </p>
+            <p>
+            <ul>
+              <?php foreach ($online as $o) : ?>
+                <li>
+                  <?= $o['nama'] ?>
+                </li>
+              <?php endforeach ?>
+            </ul>
+            </p>
+          </div>
         </li>
       </ul>
     </div>
-
-  </div>
 </nav>

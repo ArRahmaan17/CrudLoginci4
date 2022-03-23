@@ -26,21 +26,12 @@
         Data Pegawai
       </div>
       <div class="card-body">
-        <div class="col-4 my-4">
-          Current Admin Active : <?= session()->get('nama') ?>
-          Current Admin Active : <?= session()->get('role') ?>
-        </div>
-        <!-- modal tambah edit pegawai -->
-        <?php if (session()->get('role') == 'Staff') : ?>
-          <a class="btn btn-primary <?= 'disabled' ?>" <?= 'aria-disabled="true"' ?> data-bs-toggle="modal" href="#exampleModalToggle" role="button">Tambah Data Pegawai</a>
-        <?php else : ?>
-          <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Tambah Data Pegawai</a>
-        <?php endif ?>
-        <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <!-- modal update -->
+        <div class="modal fade" id="updateModal" aria-hidden="true" aria-labelledby="updateModalLabel" tabindex="-1">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel">Form Data Pegawai</h5>
+                <h5 class="modal-title" id="updateModalLabel">Form Update Pegawai</h5>
                 <button type="button" class="btn-close tombol-tutup" data-bs-dismiss="modal" onclick="bersihkan()" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -48,7 +39,78 @@
                 </div>
                 <div class=" alert alert-danger error" role="alert" style="display: none;">
                 </div>
-                <input type="text" id="inputId">
+                <input type="hidden" id="inputId">
+                <div class="mb-3 row">
+                  <label for="inputNama" class="col-sm-6 col-form-label">Nama</label>
+                  <div class="col-sm-12">
+                    <input type="text" autocomplete="off" maxlength="50" minlength="5" class="form-control" id="inputNama">
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputEmail" class="col-sm-6 col-form-label">Email</label>
+                  <div class="col-sm-12">
+                    <input type="email" maxlength="50" minlength="5" class="form-control" id="inputEmail">
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputPassword" class="col-sm-6 col-form-label">Password</label>
+                  <div class="col-sm-12">
+                    <input type="text" maxlength="50" minlength="5" class="form-control" id="inputPassword">
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputPassword" class="col-sm-6 col-form-label">Confirm Password</label>
+                  <div class="col-sm-12">
+                    <input type="text" maxlength="50" minlength="5" class="form-control" id="inputPasswordcf">
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputBidang" class="col-sm-6 col-form-label">Bidang</label>
+                  <div class="col-sm-12">
+                    <select class="form-select" name="bidang" id="inputBidang">
+                      <option value="Finance">Finance</option>
+                      <option value="Marketing">Marketing</option>
+                      <option value="Hr">HR</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputAlamat" class="col-sm-6 col-form-label">Alamat</label>
+                  <div class="col-sm-12">
+                    <input type="text" autocomplete="off" maxlength="50" minlength="5" class="form-control" id="inputAlamat">
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputBidang" class="col-sm-6 col-form-label">Role</label>
+                  <div class="col-sm-12">
+                    <select class="form-select" name="role" id="inputRole">
+                      <option value="Staff">Staff</option>
+                      <option value="Admin">Admin</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary tombol-tutup" onclick="bersihkan()" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="tombolUpdate" class="btn btn-warning">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- modal create -->
+        <div class="modal fade" id="createModal" aria-hidden="true" aria-labelledby="createModalLabel" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Form Create Pegawai</h5>
+                <button type="button" class="btn-close tombol-tutup" data-bs-dismiss="modal" onclick="bersihkan()" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="alert alert-success sukses" role="alert" style="display: none;">
+                </div>
+                <div class=" alert alert-danger error" role="alert" style="display: none;">
+                </div>
                 <div class="mb-3 row">
                   <label for="inputNama" class="col-sm-6 col-form-label">Nama</label>
                   <div class="col-sm-12">
@@ -106,7 +168,6 @@
             </div>
           </div>
         </div>
-        <!-- modal Login -->
         <!-- Table Data Pegawai -->
         <div class="container-md ">
           <div class="row align-items-center">
@@ -133,7 +194,7 @@
                       <td class="align-middle"><?= $pegawai['bidang'] ?></td>
                       <td class="align-middle"><?= $pegawai['alamat'] ?></td>
                       <td class="align-middle">
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" href="#exampleModalToggle" role="button" onclick="edit(<?= $pegawai['id'] ?>)">Edit</button>
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" href="#updateModal" role="button" onclick="edit(<?= $pegawai['id'] ?>)">Edit</button>
                         <button type="button" class="btn btn-danger btn-sm" onclick="hapus(<?= $pegawai['id'] ?>)">Delete</button>
                       </td>
                     </tr>
@@ -159,6 +220,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <script>
+      $("#pegawai").hover(
+        function() {
+          $("#toggel").click();
+        },
+        function() {
+          $("#toggel").click();
+        });
       $('.tombol-tutup').on('click', function() {
         if ($('.sukses').is('visible')) {
           window.location.href = "<?= current_url() . "?" . $_SERVER['QUERY_STRING']  ?>";
@@ -195,18 +263,62 @@
       }
 
       function bersihkan() {
-        $('inputId').val('');
+        $('#inputId').val('');
         $('#inputNama').val('');
         $('#inputEmail').val('');
-        $('#inputAlamat').val('');
         $('#inputUsername').val('');
         $('#inputPassword').val('');
         $('#inputPasswordcf').val('');
-        $('#inputRole').val('');
+        $('#inputAlamat').val('');
       }
 
-      $('#tombolSimpan').on('click', function() {
+      $('#tombolUpdate').on('click', function() {
         var $id = $('#inputId').val();
+        var $nama = $('#inputNama').val();
+        var $email = $('#inputEmail').val();
+        var $password = $('#inputPassword').val();
+        var $cfpassword = $('#inputPasswordcf').val();
+        var $bidang = $('#inputBidang').val();
+        var $alamat = $('#inputAlamat').val();
+        var $role = $('#inputRole').val();
+
+        if ($password == $cfpassword) {
+          $.ajax({
+            url: "<?= base_url('Pegawai/update') ?>",
+            type: "POST",
+            data: {
+              'id': $id,
+              'nama': $nama,
+              'email': $email,
+              'password': $password,
+              'cfpassword': $cfpassword,
+              'bidang': $bidang,
+              'alamat': $alamat,
+              'role': $role
+            },
+            success: function(hasil) {
+              $hasilobj = $.parseJSON(hasil);
+              if ($hasilobj.status == true) {
+                $('.error').hide();
+                $('.sukses').html($hasilobj.pesan);
+                $('.sukses').show();
+                bersihkan();
+                window.location = "<?= base_url() ?>";
+              } else {
+                $('.sukses').hide();
+                $('.error').html($hasilobj.pesan);
+                $('.error').show();
+              }
+            }
+          });
+        } else {
+          $('.sukses').hide();
+          $('.error').html("Password dan confirm Password Tidak Sama");
+          $('.error').show();
+        }
+      });
+
+      $('#tombolSimpan').on('click', function() {
         var $nama = $('#inputNama').val();
         var $email = $('#inputEmail').val();
         var $password = $('#inputPassword').val();
@@ -220,7 +332,6 @@
             url: "<?= base_url('Pegawai/simpan') ?>",
             type: "POST",
             data: {
-              'id': $id,
               'nama': $nama,
               'email': $email,
               'password': $password,
