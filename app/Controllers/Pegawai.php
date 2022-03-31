@@ -8,11 +8,19 @@ use PhpParser\Node\Stmt\Echo_;
 
 class Pegawai extends BaseController
 {
-
     public function __construct()
     {
         $this->pegawai = new ModelPegawai();
         session()->start();
+    }
+    public function show($id)
+    {
+        $data = $this->pegawai->find($id);
+        return view('showpegawai', [
+            'title' => 'Show Pegawai',
+            'data' => $data,
+            'online' => $this->pegawai->where(['status_login' => '1', 'role' => 'Staff'])->orderBy('id', 'desc')->paginate(100),
+        ]);
     }
     public function hapus($id)
     {
@@ -56,6 +64,15 @@ class Pegawai extends BaseController
                     'max_length' => 'Maximal karakter yang di isikan di Kolom {field} adalah 50'
                 ]
             ],
+            'foto' => [
+                'label' => 'Foto',
+                'rules' => 'is_image[foto]|ext_in[foto,png,webp]|max_size[foto,200]',
+                'errors' => [
+                    'is_image' => 'Kolom {field} Harus berupa Foto',
+                    'ext_in' => 'Kolom {field} Harus Berextensi png Atau webp',
+                    'max_size' => 'Kolom {field} tidak boleh lebih dari 200kb'
+                ]
+            ],
             'alamat' => [
                 'label' => 'Alamat',
                 'rules' => 'required|min_length[5]|max_length[50]',
@@ -74,6 +91,7 @@ class Pegawai extends BaseController
                 'password' =>  $this->request->getPost('password'),
                 'bidang' => $this->request->getPost('bidang'),
                 'alamat' => $this->request->getPost('alamat'),
+                'jeniskelamin' => $this->request->getPost('jeniskelamin'),
                 'role' => $this->request->getPost('role'),
                 'status_login' => $this->request->getPost('status_login')
             ];
@@ -141,6 +159,15 @@ class Pegawai extends BaseController
                     'max_length' => 'Maximal karakter yang di isikan di Kolom {field} adalah 50'
                 ]
             ],
+            'foto' => [
+                'label' => 'Foto',
+                'rules' => 'is_image[foto]|ext_in[foto,png,webp]|max_size[foto,200]',
+                'errors' => [
+                    'is_image' => 'Kolom {field} Harus berupa Foto',
+                    'ext_in' => 'Kolom {field} Harus Berextensi png Atau webp',
+                    'max_size' => 'Kolom {field} tidak boleh lebih dari 200kb'
+                ]
+            ],
             'alamat' => [
                 'label' => 'Alamat',
                 'rules' => 'required|min_length[5]|max_length[50]',
@@ -175,6 +202,7 @@ class Pegawai extends BaseController
                 'password' => $password,
                 'bidang' => $this->request->getPost('bidang'),
                 'alamat' => $this->request->getPost('alamat'),
+                'jeniskelamin' => $this->request->getPost('jeniskelamin'),
                 'role' => $this->request->getPost('role'),
                 'status_login' => $status_login
             ];
@@ -197,9 +225,10 @@ class Pegawai extends BaseController
         }
         $data = [
             'title' => 'Data Pegawai',
-            'online' => $this->pegawai->where(['status_login' => '1', 'role' => 'Staff'])->orderBy('id', 'desc')->paginate(100),
-            'data' => $carian->orderBy('id', 'desc')->paginate(3),
+            'data' => $carian->paginate(3),
             'pager' => $this->pegawai->pager,
+            'keyword' => $keyword,
+            'online' => $this->pegawai->where(['status_login' => '1', 'role' => 'Staff'])->orderBy('id', 'desc')->paginate(100),
         ];
         return view('pegawai_view', $data);
     }
