@@ -70,12 +70,6 @@
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="inputFoto" class="form-label">Foto Anda</label>
-            <div class="col-sm-12">
-              <input class="form-control" name="foto" type="file" id="inputFoto">
-            </div>
-          </div>
-          <div class="mb-3 row">
             <label for="inputBidang" class="col-sm-6 col-form-label">Bidang</label>
             <div class="col-sm-12">
               <select class="form-select" name="bidang" id="inputBidang">
@@ -153,12 +147,6 @@
             <label for="inputPasswordcf" class="col-sm-6 col-form-label">Confirm Password</label>
             <div class="col-sm-12">
               <input type="text" maxlength="50" minlength="5" class="form-control" id="inputPasswordcf">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputFoto" class="form-label">Foto Anda</label>
-            <div class="col-sm-12">
-              <input class="form-control" name="foto" type="file" id="inputFoto">
             </div>
           </div>
           <div class="mb-3 row">

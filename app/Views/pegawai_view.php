@@ -17,7 +17,6 @@
                 <tr>
                   <th scope="col">No</th>
                   <th scope="col">Nama</th>
-                  <th scope="col">Email</th>
                   <th scope="col">Bidang</th>
                   <th scope="col">Alamat</th>
                   <th scope="col">Jenis Kelamin</th>
@@ -28,9 +27,8 @@
                 <?php $no = 1; ?>
                 <?php foreach ($data as $pegawai) : ?>
                   <tr>
-                    <th scope="row"><?= $no++ ?></th>
+                    <th class="align-middle"><?= $no++ ?></th>
                     <td class="align-middle"><?= $pegawai['nama'] ?></td>
-                    <td class="align-middle"><?= $pegawai['email'] ?></td>
                     <td class="align-middle"><?= $pegawai['bidang'] ?></td>
                     <td class="align-middle"><?= $pegawai['alamat'] ?></td>
                     <td class="align-middle"><?= $pegawai['jeniskelamin'] ?></td>
