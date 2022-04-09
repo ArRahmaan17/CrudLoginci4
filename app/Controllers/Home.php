@@ -33,7 +33,7 @@ class Home extends BaseController
         if ($login) {
             $email = $this->request->getVar('inputEmail');
             $password = $this->request->getVar('inputPassword');
-            $dataLogin =  $this->pegawai->where(['email' => $email, 'role' => 'Admin', 'status_login' => '0'])->first();
+            $dataLogin =  $this->pegawai->where(['email' => $email, 'status_login' => '0'])->first();
             if ($dataLogin == null) {
                 $error = "User Tidak Tersedia";
                 $session->setFlashdata('email', $email);
@@ -44,12 +44,14 @@ class Home extends BaseController
                 $session->setFlashdata('email', $email);
                 $session->setFlashdata('error', $error);
                 return redirect()->to('/');
-            } else {
-                $date = getdate();
-                $session->set('jam', $date['hours']);
+            } elseif ($dataLogin['role'] == 'Staff') {
                 $db->query("UPDATE pegawai set status_login = '1' WHERE id = " . $dataLogin['id']);
                 $session->set($dataLogin);
-                return redirect()->to('datapegawai/');
+                return redirect()->to('/dashboard');
+            } else {
+                $db->query("UPDATE pegawai set status_login = '1' WHERE id = " . $dataLogin['id']);
+                $session->set($dataLogin);
+                return redirect()->to('/admindashboard');  
             }
         }
         return view('login_view', [

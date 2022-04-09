@@ -10,7 +10,7 @@ class dontHaveSession implements FilterInterface
 {
   public function before(RequestInterface $request, $arguments = null)
   {
-    if (!session()->get('nama')) {
+    if (!session()->get('email')) {
       return redirect()->to('/');
       die();
     }

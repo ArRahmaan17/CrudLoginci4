@@ -10,8 +10,8 @@ class haveSession implements FilterInterface
 {
   public function before(RequestInterface $request, $arguments = null)
   {
-    if(session()->get('nama')){
-      return redirect()->to('/datapegawai');
+    if (session()->get('email') && session()->get('role') == 'Admin') {
+      return redirect()->to('/admindashboard');
       die();
     }
   }
