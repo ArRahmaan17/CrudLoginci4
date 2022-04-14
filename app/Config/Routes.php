@@ -32,8 +32,9 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home', ['filter' => 'haveSession']);
-$routes->get('/admindashboard', 'Pegawai', ['filter' => 'dontHaveSession']);
-$routes->get('/dashboard', 'pegawai/Pegawai', ['filter' => 'haveSession']);
+$routes->get('/admindashboard', 'Admin');
+$routes->get('/orderoffline', 'Admin::orderoffline');
+$routes->get('/dashboard', 'Staff');
 
 
 /*

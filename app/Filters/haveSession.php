@@ -10,14 +10,17 @@ class haveSession implements FilterInterface
 {
   public function before(RequestInterface $request, $arguments = null)
   {
-    if (session()->get('email') && session()->get('role') == 'Admin') {
-      return redirect()->to('/admindashboard');
-      die();
+    if (session()->get('role') === 'Admin' && (session()->get('status_login') === '1')) {
+      return redirect()->to(base_url('/admindashboard'));
+    }elseif (session()->get('role') === 'Staff' && (session()->get('status_login') === '1')) {
+      return redirect()->to(base_url('/dashboard'));
+    }else{
+      // kosong
     }
   }
 
   public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
   {
-    // Do something here
+    // hehe
   }
 }
