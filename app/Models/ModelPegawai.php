@@ -21,11 +21,20 @@ class ModelPegawai extends Model
             $builder->orLike("alamat", $arr_katakunci[$x]);
             $builder->orLike("bidang", $arr_katakunci[$x]);
         }
-        return $builder;
+        return $builder->findAll();
     }
 
     public function cariId($id)
     {
         return $this->table("pegawai")->where("id", $id)->first();
+    }
+
+    public function statusLoginKosong()
+    {
+        return $this->table("pegawai")->where("status_login", "0")->findAll();
+    }
+    public function statusLoginIsi()
+    {
+        return $this->table("pegawai")->where("status_login", "1")->findAll();
     }
 }

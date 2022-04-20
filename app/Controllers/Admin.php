@@ -3,23 +3,49 @@
 namespace App\Controllers;
 
 use App\Models\ModelPegawai;
+use App\Models\ModelPesanan;
+use App\Models\ModelBarang;
 use CodeIgniter\Exceptions\AlertError;
 use PhpParser\Node\Stmt\Echo_;
 
 class Admin extends BaseController
 {
+
     public function __construct()
     {
         $this->pegawai = new ModelPegawai();
+        $this->pesanan = new ModelPesanan();
+        $this->barang = new ModelBarang();
         session()->start();
     }
 
+    public function prosespesanan($id)
+    {
+        $data = [
+            'id' => $id,
+            'status' => 'proses'
+        ];
+        $update = $this->pesanan->save($data);
+        if ($update) {
+            $hasil['status'] = true;
+            $hasil['pesan'] = 'Pesanan Berhasil DiProses';
+        } else {
+            $hasil['status'] = false;
+            $hasil['pesan'] = 'Pesanan gagal DiProses';
+        }
+        return json_encode($hasil);
+    }   
     public function orderoffline()
     {
-        $data = $this->pegawai->findAll();
+        $masuk = $this->pesanan->statusMasuk();
+        $proses = $this->pesanan->statusProses();
+        $selesai = $this->pesanan->statusSelesai();
+
         return view('admin/orderoffline', [
             'title' => 'Order Offline',
-            'data' => $data,
+            'masuk' => $masuk,
+            'proses' => $proses,
+            'selesai' => $selesai
 
         ]);
     }
@@ -38,7 +64,7 @@ class Admin extends BaseController
     }
     public function edit($id)
     {
-        return json_encode($this->pegawai->find($id));
+        return json_encode($this->pegawai->cariId($id));
     }
     public function simpan()
     {
@@ -116,7 +142,7 @@ class Admin extends BaseController
     public function update()
     {
         $validation = \Config\Services::validation();
-        $datacheck = $this->pegawai->where('id', $this->request->getPost('id'))->first();
+        $datacheck = $this->pegawai->cariId($this->request->getPost('id'));
         if (empty($datacheck)) {
             $password = md5($this->request->getPost('password'));
             $alert['status'] = 'Data Pegawai' + 404;
@@ -188,7 +214,7 @@ class Admin extends BaseController
             ]
         ];
         $validation->setRules($aturan);
-        $datacheck = $this->pegawai->where('id', $this->request->getPost('id'))->first();
+        $datacheck = $this->pegawai->cariId($this->request->getPost('id'));
         if (empty($datacheck)) {
             $password = md5($this->request->getPost('password'));
         } else {
@@ -235,8 +261,11 @@ class Admin extends BaseController
         $data = [
             'title' => 'Admin Dashboard',
             'data' => $carian->paginate(3),
-            'pager' => $this->pegawai->pager,
+            'pagerpegawai' => $this->pegawai->pager,
             'keyword' => $keyword,
+            'prosespesanan' => $this->pesanan->statusProses(),
+            'barang' => $this->barang->paginate(5),
+            'pagerbarang' => $this->barang->pager
         ];
         return view('admin/admindashboard', $data);
     }

@@ -10,18 +10,18 @@
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
-  <link href="./assets/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link href="<?= base_url('/assets/css/nucleo-icons.css'); ?>" rel="stylesheet" />
+  <link href="<?= base_url('/assets/css/nucleo-svg.css') ?>" rel="stylesheet" />
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link href="<?= base_url('/assets/css/nucleo-svg.css') ?>" rel="stylesheet" />
   <!-- CSS Files -->
-  <link id="pagestyle" href="./assets/css/argon-dashboard.css?v=2.0.2" rel="stylesheet" />
+  <link id="pagestyle" href="<?= base_url('/assets/css/argon-dashboard.css'); ?>" rel="stylesheet" />
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <style>
     body{
-    background-color: rgb(108,150,200); 
+      background-color: rgb(108,150,200); 
     }
   </style>
 </head>
@@ -124,7 +124,8 @@
         </div>
       </nav>
       <!-- end navbar -->
-
+      <div class="alert alert-success container sukses" role="alert" style="display: none;"></div>
+      <div class="alert alert-danger container error" role="alert" style="display: none;"></div>
       <div class="container-fluid">
         <?= $this->renderSection('content'); ?>  
       </div>
@@ -316,6 +317,27 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
   <script>
+    function prosespesanan($id) {
+      $.ajax({
+        url: "<?= base_url('Admin/prosespesanan')?>/"+$id,
+        type: "POST",
+        data: {'id' : $id},
+        success: function(hasil) {
+          $hasilobj = $.parseJSON(hasil);
+            if ($hasilobj.status == true) {
+              $('.error').hide();
+              $('.sukses').html($hasilobj.pesan);
+              $('.sukses').show();
+              window.location = "<?= current_url() ?>";
+            } else {
+              $('.sukses').hide();
+              $('.error').html($hasilobj.pesan);
+              $('.error').show();
+            }
+        }
+      })
+    }
+    
     $("#pegawai").hover(
       function() {
         $("#toggel").click();

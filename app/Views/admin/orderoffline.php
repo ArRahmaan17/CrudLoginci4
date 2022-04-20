@@ -1,49 +1,50 @@
 <?= $this->extend('allin/templates'); ?>
 <?= $this->section('content'); ?>
 <div class="row">
-  <div class="col-12">
-    <div class="card mb-4">
+  <div class="col-xl-12 col-md-12">
+    <div class="card mb-1">
       <div class="card-header pb-0">
-        <h6>Orderan Offline</h6>
+        <h5>Pesanan Masuk</h5>
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="table-responsive p-0">
           <table class="table align-items-center mb-0">
             <thead>
               <tr>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Pemesan</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Jumlah Pesanan</th>
-                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status Pesanan</th>
-                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pesan</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-4">Nama Pemesan</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Pesanan</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Pesan</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                 <th class="text-secondary opacity-7"></th>
               </tr>
             </thead>
             <tbody>
-              <?php foreach ($data as $d): ?>
+              <?php foreach ($masuk as $d): ?>
                 <tr>
                   <td>
-                    <div class="d-flex px-2 py-1">
+                    <div class="d-flex">
                       <div>
-                        <img src="<?= base_url('/img/avatardefault.png') ?>" class="avatar avatar-sm me-3" alt="user1">
+                        <img src="<?= base_url('/img/avatardefault.png') ?>" class="avatar avatar-sm me-2">
                       </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm"><?= $d['nama'] ?></h6>
-                        <p class="text-xs text-secondary mb-0"><?= $d['email'] ?></p>
-                      </div>
+                      <h6 class="pt-2 text-md"><?= $d['nama'] ?></h6>
                     </div>
                   </td>
                   <td>
-                    <p class="text-xs font-weight-bold mb-0">Manager</p>
-                    <p class="text-xs text-secondary mb-0">Organization</p>
+                    <p class="text-xs text-wrap font-weight-bold text-uppercase mb-0">Beras <?= $d['barang'] ?></p>
+                    <p class="text-xs text-secondary text-uppercase mb-0"><?= $d['jumlah'] ?> <?= $d['dimensi'] ?></p>
                   </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm <?= ($d['status_login'] == '1') ? 'bg-gradient-success' : 'bg-gradient-secondary' ; ?>"><?= ($d['status_login'] == '1') ? 'Online' : 'Offline' ; ?></span>
+                  <td class="ps-4 text-md">
+                    <span class="text-secondary text-xs font-weight-bold"><?= $d['tanggalmasuk'] ?></span>
                   </td>
-                  <td class="align-middle text-center">
-                    <span class="text-secondary text-xs font-weight-bold">23/04/18</span>
+                  <td class="ps-3">
+                    <span class="badge badge-sm bg-gradient-secondary">Masuk</span>
                   </td>
-                  <td class="align-middle">
-                    <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">Edit</a>
+                  <td class="align-middle dropleft">
+                    <a class="text-secondary font-weight-bold text-xs" type="button" id="editDrdw" data-bs-toggle="dropdown" aria-expanded="false">Proses Pesanan</a>
+                    <ul class=" dropdown-menu" aria-labelledby="editDrdw">
+                      <li><a class="dropdown-item text-xs" onclick="prosespesanan(<?= $d['id'] ?>)">Proses</a></li>
+                      <li><a class="dropdown-item text-xs">Edit</a></li>
+                    </ul>
                   </td>
                 </tr>
               <?php endforeach ?>
@@ -55,59 +56,91 @@
   </div>
 </div>
 <!-- end order offline -->
+
 <!-- proses barang -->
-<div class="row">
-  <div class="col-12">
+<div class="row mt-4">
+  <div class="col-xl-6 col-md-12">
     <div class="card mb-4">
       <div class="card-header pb-0">
-        <h6>Proses Pesanan</h6>
+        <h5>Pesanan Di Proses</h5>
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="table-responsive p-0">
           <table class="table align-items-center justify-content-center mb-0">
             <thead>
               <tr>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Budget</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Completion</th>
-                <th></th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Orderan</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status Order</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Completion</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <div class="d-flex px-2">
-                    <div>
-                      <img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm rounded-circle me-2" alt="spotify">
-                    </div>
-                    <div class="my-auto">
-                      <h6 class="mb-0 text-sm">Spotify</h6>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <p class="text-sm font-weight-bold mb-0">$2,500</p>
-                </td>
-                <td>
-                  <span class="text-xs font-weight-bold">working</span>
-                </td>
-                <td class="align-middle text-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                          <span class="me-2 text-xs font-weight-bold">100%</span>
-                        <div>
-                        <div class="progress">
-                          <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+              <?php foreach ($proses as $p): ?>
+                <tr>
+                  <td title="Garapan Pak <?= $p['nama'] ?>">
+                    <div class="d-flex">
+                      <div class="my-auto">
+                        <h6 class="mb-0 text-sm"><?= $p['nama']?></h6>
                       </div>
                     </div>
-                  </div>
-                </td>
-                  <td class="align-middle">
-                    <button class="btn btn-link text-secondary mb-0">
-                      <i class="fa fa-ellipsis-v text-xs"></i>
-                    </button>
                   </td>
+                  <td class="ps-3">
+                    <span class="badge badge-sm bg-gradient-danger" onclick="prosesselesai(<?= $p['id'] ?>)">Proses</span>
+                  </td>
+                  <td>
+                    <div class="text-truncate">
+                      <span class="me-1 text-xs font-weight-bold">50%</span>
+                      <div class="progress">
+                        <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6 col-md-12">
+    <div class="card mb-4">
+      <div class="card-header pb-0">
+        <h5>Pesanan Selesai</h5>
+      </div>
+      <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center justify-content-center mb-0">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Orderan</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status Order</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Completion</th>
               </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($selesai as $s): ?>
+                <tr>
+                  <td title="Garapan Pak <?= $s['nama'] ?>">
+                    <div class="d-flex">
+                      <div class="my-auto">
+                        <h6 class="mb-0 text-sm"><?= $s['nama']?></h6>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="ps-3">
+                    <span class="badge badge-sm bg-gradient-success ">selesai</span>
+                  </td>
+                  <td>
+                    <div class="text-truncate">
+                      <span class="me-1 text-xs font-weight-bold">100%</span>
+                      <div class="progress">
+                        <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              <?php endforeach ?>
             </tbody>
           </table>
         </div>
