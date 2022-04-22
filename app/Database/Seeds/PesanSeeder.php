@@ -14,7 +14,7 @@ class PesanSeeder extends Seeder
         for ($i=0; $i < 50; $i++) { 
             $data = [
                 'nama' => $faker->name($gender = 'male'|'female'),
-                'barang'    => $faker->randomElement(['Merah','Coklat','Hitam','Aromatik', 'Susu','Ketan Hitam']),
+                'barang'    => $faker->randomElement(['Merah', 'Coklat', 'Hitam', 'Aromatik', 'Susu', 'Ketan']),
                 'jumlah' => $faker->randomNumber(4, true),
                 'dimensi' => $faker->randomElement(['Lt','Kg','Pcs']),
                 'tanggalmasuk' => $faker->date(),

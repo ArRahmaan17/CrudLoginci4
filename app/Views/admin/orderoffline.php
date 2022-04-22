@@ -4,7 +4,9 @@
   <div class="col-xl-12 col-md-12">
     <div class="card mb-1">
       <div class="card-header pb-0">
-        <h5>Pesanan Masuk</h5>
+        <a class="text-decoration-none" href="<?= base_url('/pesananmasuk') ?>">
+          <h5>Pesanan Masuk</h5>
+        </a>
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="table-responsive p-0">
@@ -19,7 +21,7 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach ($masuk as $d): ?>
+              <?php foreach ($masuk as $d) : ?>
                 <tr>
                   <td>
                     <div class="d-flex">
@@ -34,7 +36,7 @@
                     <p class="text-xs text-secondary text-uppercase mb-0"><?= $d['jumlah'] ?> <?= $d['dimensi'] ?></p>
                   </td>
                   <td class="ps-4 text-md">
-                    <span class="text-secondary text-xs font-weight-bold"><?= $d['tanggalmasuk'] ?></span>
+                    <span class="text-secondary text-xs font-weight-bold"><?= $d['tanggalpesan'] ?></span>
                   </td>
                   <td class="ps-3">
                     <span class="badge badge-sm bg-gradient-secondary">Masuk</span>
@@ -55,7 +57,7 @@
     </div>
   </div>
 </div>
-<!-- end order offline -->
+<!-- end barang masuk -->
 
 <!-- proses barang -->
 <div class="row mt-4">
@@ -75,17 +77,25 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach ($proses as $p): ?>
+              <?php foreach ($proses as $p) : ?>
                 <tr>
                   <td title="Garapan Pak <?= $p['nama'] ?>">
                     <div class="d-flex">
                       <div class="my-auto">
-                        <h6 class="mb-0 text-sm"><?= $p['nama']?></h6>
+                        <h6 class="mb-0 text-sm"><?= $p['nama'] ?></h6>
                       </div>
                     </div>
                   </td>
                   <td class="ps-3">
-                    <span class="badge badge-sm bg-gradient-danger" onclick="prosesselesai(<?= $p['id'] ?>)">Proses</span>
+                    <span class="badge badge-sm bg-gradient-danger" type="button" id="prosesDrpdw" data-bs-toggle="dropdown" aria-expanded="false">Proses</span>
+                    <ul class=" dropdown-menu" aria-labelledby="prosesDrpdw">
+                      <?php if ($p['fotoproses'] == null) : ?>
+                        <li><a class="dropdown-item text-xs" href="<?= base_url("/orderoffline") ?>/<?= $p['id'] ?>">Masukan Bukti Proses</a></li>
+                      <?php endif ?>
+                      <?php if ($p['fotoproses'] !== null) : ?>
+                        <li><a class=" dropdown-item text-xs" onlclick="prosesselesai(<?= $p['id'] ?>)">Selesai</a></li>
+                      <?php endif ?>
+                    </ul>
                   </td>
                   <td>
                     <div class="text-truncate">
@@ -119,12 +129,12 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach ($selesai as $s): ?>
+              <?php foreach ($selesai as $s) : ?>
                 <tr>
                   <td title="Garapan Pak <?= $s['nama'] ?>">
                     <div class="d-flex">
                       <div class="my-auto">
-                        <h6 class="mb-0 text-sm"><?= $s['nama']?></h6>
+                        <h6 class="mb-0 text-sm"><?= $s['nama'] ?></h6>
                       </div>
                     </div>
                   </td>

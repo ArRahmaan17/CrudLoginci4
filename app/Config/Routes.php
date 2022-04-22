@@ -31,10 +31,12 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home', ['filter' => 'haveSession']);
+$routes->get('/orderoffline/(:any)', 'Admin::cariidpesanan/$1');
 $routes->get('/admindashboard', 'Admin');
 $routes->get('/orderoffline', 'Admin::orderoffline');
+$routes->get('/pesananmasuk', 'Admin::pesananmasuk');
 $routes->get('/dashboard', 'Staff');
+$routes->get('/', 'Home', ['filter' => 'haveSession']);
 
 
 /*

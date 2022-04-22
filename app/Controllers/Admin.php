@@ -18,7 +18,44 @@ class Admin extends BaseController
         $this->barang = new ModelBarang();
         session()->start();
     }
-
+    public function buktiproses($id)
+    {
+        $foto = $this->request->getFile('foto_proses');
+        $newname = $foto->getRandomName();
+        $validation = \Config\Services::validation();
+        $aturan = [
+            'foto_proses' => [
+                'label' => 'Foto Proses',
+                'rules' => 'uploaded[foto_proses]|is_image[foto_proses]'
+            ]
+        ];
+        $validation->setRules($aturan);
+        if ($validation->withRequest($this->request)->run()) {
+            $namafoto = $foto->getRandomName();
+            $data = [
+                'id' => $id,
+                'id_pegawai' => $this->request->getVar('id_pegawai'),
+                'fotoproses' => $namafoto
+            ];
+            $update = $this->pesanan->save($data);
+            if ($update) {
+                $foto->move('img', $namafoto);
+                return redirect()->to(base_url('/orderoffline'));
+            } else {
+                return redirect()->to(base_url('orderoffline/' . $id));
+            }
+        } else {
+            return redirect()->to(base_url('orderoffline/' . $id));
+        }
+    }
+    public function cariidpesanan($id)
+    {
+        $data = [
+            'title' => 'Update Pesanan',
+            'data' => $this->pesanan->cariId($id)
+        ];
+        return view('Admin/updatepesanan', $data);
+    }
     public function prosespesanan($id)
     {
         $data = [
@@ -34,12 +71,20 @@ class Admin extends BaseController
             $hasil['pesan'] = 'Pesanan gagal DiProses';
         }
         return json_encode($hasil);
-    }   
+    }
+    public function pesananmasuk()
+    {
+        $masuk = $this->pesanan->statusMasuk()->findAll();
+        return view('admin/pesananmasuk', [
+            'title' => 'Barang Masuk',
+            'masuk' => $masuk
+        ]);
+    }  
     public function orderoffline()
     {
-        $masuk = $this->pesanan->statusMasuk();
-        $proses = $this->pesanan->statusProses();
-        $selesai = $this->pesanan->statusSelesai();
+        $masuk = $this->pesanan->statusMasuk()->paginate(5);
+        $proses = $this->pesanan->statusProses()->paginate(5);
+        $selesai = $this->pesanan->statusSelesai()->paginate(5);
 
         return view('admin/orderoffline', [
             'title' => 'Order Offline',
