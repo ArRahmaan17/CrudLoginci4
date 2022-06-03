@@ -24,7 +24,7 @@
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item dropup">
-          <span class="nav-link dropdown-toggle drop" href="#" id="admin" data-bs-toggle="dropdown" aria-expanded="false"><?= session()->get('nama') ?> </span>
+          <span class="nav-link dropdown-toggle drop" href="#" id="admin" data-bs-toggle="dropdown" aria-expanded="false"><?= session()->get('nama_pegawai') ?> </span>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="admin">
             <li>
               <h3 class="dropdown-header">Admin Fitur </h3>
@@ -33,7 +33,7 @@
               <hr class="dropdown-divider">
             </li>
             <li><a class="dropdown-item" data-bs-toggle="modal" href="#createModal" role="button">New Pegawai</a></li>
-            <li><a class="dropdown-item" data-bs-toggle="modal" href="#updateModal" role="button" onclick="edit(<?= session()->get('id') ?>)">Update Profile</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" href="#updateModal" role="button" onclick="edit(<?= session()->get('id_pegawai') ?>)">Update Profile</a></li>
             <li><a class="dropdown-item" href="/Home/logout">Logout</a></li>
           </ul>
         </li>

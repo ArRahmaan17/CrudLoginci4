@@ -10,10 +10,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <style>
     body{
-    background-color: rgb(33,158,188);
+    background-color: rgb(175, 179, 176);
     }
     .shadow{
-      background-color: rgb(142,202,230);
+      background-color: rgb(108,199,255);
     }
   </style>
 </head>

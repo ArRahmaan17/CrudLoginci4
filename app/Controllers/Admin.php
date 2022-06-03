@@ -4,9 +4,10 @@ namespace App\Controllers;
 
 use App\Models\ModelPegawai;
 use App\Models\ModelPesanan;
+use App\Models\ModelBarangMasuk;
 use App\Models\ModelBarang;
-use CodeIgniter\Exceptions\AlertError;
-use PhpParser\Node\Stmt\Echo_;
+use App\Models\ModelPelanggan;
+use CodeIgniter\I18n\Time;
 
 class Admin extends BaseController
 {
@@ -15,13 +16,156 @@ class Admin extends BaseController
     {
         $this->pegawai = new ModelPegawai();
         $this->pesanan = new ModelPesanan();
+        $this->barangmasuk = new ModelBarangMasuk();
         $this->barang = new ModelBarang();
+        $this->pelanggan = new ModelPelanggan();
         session()->start();
+    }
+    public function jam()
+    {
+        return date('D-M-Y h:m:s');
+    }
+    public function barangmasuk()
+    {
+        $data = [
+            'title' => 'Barang Masuk',
+            'barang' => $this->barangmasuk->barang()->findAll(),
+        ];
+        return view('admin/barangmasuk', $data);
+    }
+    // end Barang Masuk
+    public function editpesanan($id)
+    {
+        dd($this->request->getVar());
+        $validation = \Config\Services::validation();
+        $aturan = [
+            'id_pegawai' => [
+                'rules' => 'numeric'
+            ],
+            'nama_pelanggan' => [
+                'label' => 'Nama Pemesan',
+                'rules' => 'alpha_space'
+            ],
+            'barangPesanan' => [
+                'label' => 'Barang Pesanan',
+                'rules' => 'alpha_space'
+            ],
+            'jumlahPesanan' => [
+                'label' => 'Jumlah Pesanan',
+                'rules' => 'numeric'
+            ]
+        ];
+        $validation->setRules($aturan);
+        if ($validation->withRequest($this->request)->run()) {
+            $data = [
+                'id_pesanan' => $id,
+                'id_pegawai' => $this->request->getVar('idpegawai'),
+                'id_pelanggan' => $this->request->getVar('namaPemesan'),
+                'barang' => $this->request->getVar('barangPesanan'),
+                'jumlah' => $this->request->getVar('jumlahPesanan'),
+                'dimensi' => $this->request->getVar('dimensiPesanan'),
+            ];
+            $this->pesanan->save($data);
+            session()->setFlashdata('berhasil', 'DataBerhasil DiUpdate');
+            return redirect()->to(base_url('/orderoffline'));
+        } else {
+            session()->setFlashdata('gagal', $validation->listErrors());
+            return redirect()->to(base_url('/orderoffline/editpesanan/' + $id))->withInput();
+        }
+    }
+    public function editorder($id)
+    {
+        $datapesanan = $this->pesanan->cariId($id);
+        $data = [
+            'title' => 'Edit Pesanan Offline',
+            'data'  => $datapesanan,
+            'pelanggan' => $this->pelanggan->findAll(),
+            'barang' => $this->barang->findAll()
+        ];
+        return view('Admin/editpesanan', $data);
+    }
+    public function tambahorder()
+    {
+        return view('admin/tambahpesanan', [
+            'title' => 'Tambah Pesanan Offline',
+            'pelanggan' => $this->pelanggan->findAll(),
+            'barang' => $this->barang->findAll()
+        ]);
+    }
+    public function tambahpesanan()
+    {
+        $validation = \Config\Services::validation();
+        $aturan = [
+            'idpegawai' => [
+                'rules' => 'required|numeric'
+            ],
+            'namaPemesan' => [
+                'label' => 'Nama Pemesan',
+                'rules' => 'required|alpha_space'
+            ],
+            'barangPesanan' => [
+                'label' => 'Barang Pesanan',
+                'rules' => 'required|alpha_space'
+            ],
+            'jumlahPesanan' => [
+                'label' => 'Jumlah Pesanan',
+                'rules' => 'required|numeric'
+            ]
+        ];
+        $validation->setRules($aturan);
+        if ($validation->withRequest($this->request)->run()) {
+            $data = [
+                'id_pegawai' => $this->request->getVar('idpegawai'),
+                'nama' => $this->request->getVar('namaPemesan'),
+                'barang' => $this->request->getVar('barangPesanan'),
+                'jumlah' => $this->request->getVar('jumlahPesanan'),
+                'dimensi' => $this->request->getVar('dimensiPesanan'),
+                'tanggalpesan' => Time::now(),
+                'status' => 'masuk'
+            ];
+            $this->pesanan->save($data);
+            session()->setFlashdata('berhasil', 'DataBerhasil Ditambahkan');
+            return redirect()->to(base_url('/orderoffline'));
+        } else {
+            session()->setFlashdata('gagal', $validation->listErrors());
+            return redirect()->to(base_url('/orderoffline/tambahpesanan'))->withInput();
+        }
+    }
+    public function buktiselesai($id)
+    {
+        $foto = $this->request->getFile('foto_selesai');
+        $validation = \Config\Services::validation();
+        $aturan = [
+            'foto_selesai' => [
+                'label' => 'Bukti Pesanan Selesai',
+                'rules' => 'uploaded[foto_selesai]|is_image[foto_selesai]',
+
+            ]
+        ];
+        $validation->setRules($aturan);
+        if ($validation->withRequest($this->request)->run()) {
+            $namafoto = $foto->getRandomName();
+            $data = [
+                'id' => $id,
+                'id_pegawai' => $this->request->getVar('id_pegawai'),
+                'fotoselesai' => $namafoto,
+                'status' => 'selesai',
+                'tanggalselesai' => Time::now()
+            ];
+            $update = $this->pesanan->save($data);
+            if ($update) {
+                $foto->move('img/fotoselesai/', $namafoto);
+                return redirect()->to(base_url('/orderoffline'));
+            } else {
+                return redirect()->to(base_url('orderoffline/' . $id));
+            }
+        } else {
+            return redirect()->to(base_url('orderoffline/' . $id));
+        }
     }
     public function buktiproses($id)
     {
         $foto = $this->request->getFile('foto_proses');
-        $newname = $foto->getRandomName();
         $validation = \Config\Services::validation();
         $aturan = [
             'foto_proses' => [
@@ -30,6 +174,7 @@ class Admin extends BaseController
             ]
         ];
         $validation->setRules($aturan);
+
         if ($validation->withRequest($this->request)->run()) {
             $namafoto = $foto->getRandomName();
             $data = [
@@ -39,7 +184,7 @@ class Admin extends BaseController
             ];
             $update = $this->pesanan->save($data);
             if ($update) {
-                $foto->move('img', $namafoto);
+                $foto->move('img/fotoproses/', $namafoto);
                 return redirect()->to(base_url('/orderoffline'));
             } else {
                 return redirect()->to(base_url('orderoffline/' . $id));
@@ -50,11 +195,22 @@ class Admin extends BaseController
     }
     public function cariidpesanan($id)
     {
-        $data = [
-            'title' => 'Update Pesanan',
-            'data' => $this->pesanan->cariId($id)
-        ];
-        return view('Admin/updatepesanan', $data);
+        $datapesanan = $this->pesanan->cariId($id);
+
+        if ($datapesanan['fotoproses']) {
+            $dataupdate = $this->pesanan->sudahproses($id);
+            return view('admin/selesaipesanan', [
+                'title' => 'Selesaikan Pesanan',
+                'data' => $dataupdate
+            ]);
+        } else {
+            $dataupdate = $this->pesanan->belumproses($id);
+            return view('admin/updatepesanan', [
+                'title' => 'Proses Pesanan',
+                'data' => $dataupdate
+            ]);
+        }
+        
     }
     public function prosespesanan($id)
     {
@@ -76,7 +232,7 @@ class Admin extends BaseController
     {
         $masuk = $this->pesanan->statusMasuk()->findAll();
         return view('admin/pesananmasuk', [
-            'title' => 'Barang Masuk',
+            'title' => 'pesanan Masuk',
             'masuk' => $masuk
         ]);
     }  
@@ -94,14 +250,7 @@ class Admin extends BaseController
 
         ]);
     }
-    public function show($id)
-    {
-        $data = $this->pegawai->find($id);
-        return view('admin/showpegawai', [
-            'title' => 'Show Pegawai',
-            'data' => $data,
-        ]);
-    }
+    // end Order Offline
     public function hapus($id)
     {
         $this->pegawai->delete($id);
@@ -184,6 +333,7 @@ class Admin extends BaseController
         }
         return json_encode($hasil);
     }
+    //
     public function update()
     {
         $validation = \Config\Services::validation();
@@ -199,7 +349,7 @@ class Admin extends BaseController
                 $password = md5($this->request->getPost('password'));
             }
         }
-        if (session()->get('id') == $datacheck['id']) {
+        if (session()->get('id_pegawai') == $datacheck['id_pegawai']) {
             $status_login = '1';
         } else {
             $status_login = '0';
@@ -211,7 +361,7 @@ class Admin extends BaseController
             $emailrule = 'valid_email|min_length[5]|max_length[50]|is_unique[pegawai.email]';
         }
         $aturan = [
-            'nama' => [
+            'nama_pegawai' => [
                 'label' => 'Nama',
                 'rules' => 'required|min_length[5]|max_length[50]',
                 'errors' => [
@@ -269,15 +419,15 @@ class Admin extends BaseController
                 $password = md5($this->request->getPost('password'));
             }
         }
-        if (session()->get('id') == $datacheck['id']) {
+        if (session()->get('id_pegawai') == $datacheck['id_pegawai']) {
             $status_login = '1';
         } else {
             $status_login = '0';
         }
         if ($validation->withRequest($this->request)->run()) {
             $data = [
-                'id' => $this->request->getPost('id'),
-                'nama' => $this->request->getPost('nama'),
+                'id_pegawai' => $this->request->getPost('id'),
+                'nama_pegawai' => $this->request->getPost('nama'),
                 'email' => $this->request->getPost('email'),
                 'password' => $password,
                 'bidang' => $this->request->getPost('bidang'),
@@ -295,6 +445,7 @@ class Admin extends BaseController
         }
         return json_encode($hasil);
     }
+    //displaying admindashoard view
     public function index()
     {
         $keyword = $this->request->getGet('keyword');
@@ -305,11 +456,12 @@ class Admin extends BaseController
         }
         $data = [
             'title' => 'Admin Dashboard',
-            'data' => $carian->paginate(3),
-            'pagerpegawai' => $this->pegawai->pager,
             'keyword' => $keyword,
+            'allpesanan' => $this->pesanan->countAll(),
+            'allbarangmasuk'=> $this->barangmasuk->countAll(),
+            'pesananselesai' => $this->pesanan->statusSelesai()->countAllResults(),
             'prosespesanan' => $this->pesanan->statusProses(),
-            'barang' => $this->barang->paginate(5),
+            'barang' => $this->barangmasuk->barang()->paginate(5),
             'pagerbarang' => $this->barang->pager
         ];
         return view('admin/admindashboard', $data);

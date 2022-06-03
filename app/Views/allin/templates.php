@@ -31,7 +31,7 @@
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href="/admindashboard">
+      <a class="navbar-brand m-0" href="<?= base_url('/admindashboard') ?>">
         <img src="<?= base_url('/assets/img/logo-ct-dark.png') ?>" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold"><?= $title ?></span>
       </a>
@@ -40,7 +40,7 @@
     <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link <?= ($title == 'Admin Dashboard') ? 'active' : ' ';  ?>" href="<?= base_url('/admindashboard') ?>">
+          <a class="nav-link <?= ($title == 'Admin Dashboard') ? 'active' : '';  ?>" href="<?= base_url('/admindashboard') ?>">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
             </div>
@@ -48,7 +48,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  <?= ($title == 'Order Offline') ? 'active' : ' ';  ?> " href="<?= base_url('/orderoffline') ?>">
+          <a class="nav-link  <?= ($title == 'Order Offline') ? 'active' : '';  ?> " href="<?= base_url('/orderoffline') ?>">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
@@ -56,7 +56,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./pages/billing.html">
+          <a class="nav-link  <?= ($title == 'Barang Masuk') ? 'active' : '';  ?> " href="<?= base_url('/barangmasuk') ?>">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
             </div>
@@ -78,20 +78,16 @@
     <!-- Navbar -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
       <div class="container-fluid py-1 px-3">
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body">
-                <i class="fas fa-search" aria-hidden="true"></i>
-              </span>
-              <input type="text" class="form-control" placeholder="Type here...">
-            </div>
-          </div>
-          <ul class="navbar-nav  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a href="#" class="nav-link text-white font-weight-bold px-0">
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 justify-content-end" id="navbar">
+          <ul class="navbar-nav">
+            <li class="nav-item d-flex align-items-center text-white">
+              <i class="fa fa-clock me-sm-1 d-sm-inline d-none"></i>
+              <span id="jamserver" class="d-sm-inline d-none"></span>
+            </li>
+            <li class="nav-item d-flex ps-3 align-items-center">
+              <a class="nav-link text-white font-weight-bold px-0" data-bs-toggle="offcanvas" href="#akunControl" role="button" aria-controls="offcanvasExample">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none" data-bs-toggle="offcanvas" href="#akunControl" role="button" aria-controls="offcanvasExample"><?= session()->get('nama') ?></span>
+                <span class="d-sm-inline d-none" >Hallo, <?= session()->get('nama_pegawai') ?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -103,18 +99,20 @@
                 </div>
               </a>
             </li>
-            <li class="nav-item px-3 d-flex align-items-center">
+            <!-- <li class="nav-item px-3 d-flex align-items-center">
               <div class="form-check form-switch ps-0 ms-auto my-auto">
                 <input class="form-check-input mt-1 ms-auto" type="checkbox" onclick="darkMode(this)" id="dark-version">
               </div>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
     </nav>
     <!-- end navbar -->
-    <div class="alert alert-success container sukses" role="alert" style="display: none;"></div>
-    <div class="alert alert-danger container error" role="alert" style="display: none;"></div>
+    <div class="alert alert-success container sukses" role="alert" style="display: none;">
+    </div>
+    <div class="alert alert-danger container error" role="alert" style="display: none;">
+    </div>
     <div class="container-fluid">
       <?= $this->renderSection('content'); ?>
     </div>
@@ -132,34 +130,22 @@
               <a class="nav-link d-flex" href="<?= base_url('/admindashboard') ?>">
                 <span class="nav-link-text mt-1">Edit Profile</span>
                 <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center  justify-content-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z" />
+                    <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
                   </svg>
                 </div>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex" href="<?= base_url('/orderoffline') ?>">
+              <a class="nav-link d-flex" href="<?= base_url('/logout') ?>">
+                <span class="nav-link-text mt-1">Logout</span>
                 <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                  </svg>
                 </div>
-                <span class="nav-link-text mt-1">Order Offline</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex" href="./pages/billing.html">
-                <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-                </div>
-                <span class="nav-link-text mt-1">Barang Masuk</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex" href="./pages/virtual-reality.html">
-                <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="ni ni-app text-info text-sm opacity-10"></i>
-                </div>
-                <span class="nav-link-text mt-1">Laporan Harian</span>
               </a>
             </li>
           </ul>
@@ -184,192 +170,6 @@
       </div>
     </footer>
   </main>
-
-  <div class="modal fade" id="modalBuktiProses" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Silahkan Foto Proses Pengerjaan Pesanan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="bersihkan()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form method="GET" enctype="multipart/form-data">
-            <div class="mb-3">
-              <input type="text" id="idProses">
-              <label for="message-text" class="col-form-label">Pilih Foto:</label>
-              <input type="file" name="inputFoto">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="buktifotoproses">Send message</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- end bukti proses -->
-
-  <div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-secondary">
-        <div class="modal-header">
-          <h5 class="modal-title" id="updateModalLabel">Form Update Pegawai</h5>
-          <button type="button" class="btn-close tombol-tutup" data-bs-dismiss="modal" onclick="bersihkan()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-success sukses" role="alert" style="display: none;">
-          </div>
-          <div class=" alert alert-danger error" role="alert" style="display: none;">
-          </div>
-          <input type="hidden" id="inputId">
-          <div class="mb-3 row">
-            <label for="inputNama" class="col-sm-6 col-form-label">Nama</label>
-            <div class="col-sm-12">
-              <input type="text" autocomplete="off" name="nama" maxlength="50" minlength="5" class="form-control" id="inputNama">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputEmail" class="col-sm-6 col-form-label">Email</label>
-            <div class="col-sm-12">
-              <input type="email" maxlength="50" minlength="5" class="form-control" name="email" id="inputEmail">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputPassword" class="col-sm-6 col-form-label">Password</label>
-            <div class="col-sm-12">
-              <input type="text" maxlength="50" minlength="5" class="form-control" name="password" id="inputPassword">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputPasswordcf" class="col-sm-6 col-form-label">Confirm Password</label>
-            <div class="col-sm-12">
-              <input type="text" maxlength="50" minlength="5" class="form-control" id="inputPasswordcf">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputBidang" class="col-sm-6 col-form-label">Bidang</label>
-            <div class="col-sm-12">
-              <select class="form-select" name="bidang" id="inputBidang">
-                <option value="Finance">Finance</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Hr">HR</option>
-              </select>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputAlamat" class="col-sm-6 col-form-label">Alamat</label>
-            <div class="col-sm-12">
-              <input type="text" name="alamat" autocomplete="off" maxlength="50" minlength="5" class="form-control" id="inputAlamat">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputBidang" class="col-sm-6 col-form-label">jenis Kelamin</label>
-            <div class="col-sm-12">
-              <select class="form-select" name="jeniskelamin" id="inputJk">
-                <option value="L">Laki Laki</option>
-                <option value="P">Perempuan</option>
-                <option value="Kh">Khusus</option>
-              </select>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputBidang" class="col-sm-6 col-form-label">Role</label>
-            <div class="col-sm-12">
-              <select class="form-select" name="role" id="inputRole">
-                <option value="Staff">Staff</option>
-                <option value="Admin">Admin</option>
-              </select>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger tombol-tutup" onclick="bersihkan()" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" id="tombolUpdate" class="btn btn-warning">Update</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- modal create -->
-  <div class="modal fade" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-secondary">
-        <div class="modal-header">
-          <h5 class="modal-title" id="createModalLabel">Form Create Pegawai</h5>
-          <button type="button" class="btn-close tombol-tutup" data-bs-dismiss="modal" onclick="bersihkan()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-success sukses" role="alert" style="display: none;">
-          </div>
-          <div class=" alert alert-danger error" role="alert" style="display: none;">
-          </div>
-          <div class="mb-3 row">
-            <label for="inputNama" class="col-sm-6 col-form-label">Nama</label>
-            <div class="col-sm-12">
-              <input type="text" autocomplete="off" name="nama" maxlength="50" minlength="5" class="form-control" id="inputNama">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputEmail" class="col-sm-6 col-form-label">Email</label>
-            <div class="col-sm-12">
-              <input type="email" maxlength="50" minlength="5" class="form-control" name="email" id="inputEmail">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputPassword" class="col-sm-6 col-form-label">Password</label>
-            <div class="col-sm-12">
-              <input type="text" maxlength="50" minlength="5" class="form-control" name="password" id="inputPassword">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputPasswordcf" class="col-sm-6 col-form-label">Confirm Password</label>
-            <div class="col-sm-12">
-              <input type="text" maxlength="50" minlength="5" class="form-control" id="inputPasswordcf">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputBidang" class="col-sm-6 col-form-label">Bidang</label>
-            <div class="col-sm-12">
-              <select class="form-select" name="bidang" id="inputBidang">
-                <option value="Finance">Finance</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Hr">HR</option>
-              </select>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputAlamat" class="col-sm-6 col-form-label">Alamat</label>
-            <div class="col-sm-12">
-              <input type="text" name="alamat" autocomplete="off" maxlength="50" minlength="5" class="form-control" id="inputAlamat">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputBidang" class="col-sm-6 col-form-label">jenis Kelamin</label>
-            <div class="col-sm-12">
-              <select class="form-select" name="jeniskelamin" id="inputJk">
-                <option value="L">Laki Laki</option>
-                <option value="P">Perempuan</option>
-                <option value="Kh">Khusus</option>
-              </select>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="inputBidang" class="col-sm-6 col-form-label">Role</label>
-            <div class="col-sm-12">
-              <select class="form-select" name="role" id="inputRole">
-                <option value="Staff">Staff</option>
-                <option value="Admin">Admin</option>
-              </select>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger tombol-tutup" onclick="bersihkan()" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" id="tombolSimpan" class="btn btn-primary">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <script src="<?= base_url('/assets/js/core/popper.min.js') ?>"></script>
   <script src="<?= base_url('/assets/js/plugins/perfect-scrollbar.min.js') ?>"></script>
   <script src="<?= base_url('/assets/js/plugins/smooth-scrollbar.min.js') ?>"></script>
@@ -381,6 +181,41 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
   <script>
+    $(document).ready(function() {
+      setInterval(timestamp(), 1000);
+    });
+
+    function timestamp() {
+      $.ajax({
+        url: '<?= base_url('Admin/jam') ?>',
+        success: function(data) {
+          $('#jamserver').html(data);
+        }
+      });
+    }
+    function prosesselesai($id) {
+      $.ajax({
+        url: "<?= base_url('Admin/prosesselesai') ?>/" + $id,
+        type: "POST",
+        data: {
+          'id': $id
+        },
+        success: function(hasil) {
+          $hasilobj = $.parseJSON(hasil);
+          if ($hasilobj.status == true) {
+            $('.error').hide();
+            $('.alert-success').html($hasilobj.pesan);
+            $('.sukses').show();
+            window.location = "<?= current_url() ?>";
+          } else {
+            $('.sukses').hide();
+            $('.alert-danger').html($hasilobj.pesan);
+            $('.error').show();
+          }
+        }
+      });
+    }
+
     function prosespesanan($id) {
       $.ajax({
         url: "<?= base_url('Admin/prosespesanan') ?>/" + $id,
@@ -404,13 +239,6 @@
       });
     }
 
-    $("#pegawai").hover(
-      function() {
-        $("#toggel").click();
-      },
-      function() {
-        $("#toggel").click();
-      });
     $('.tombol-tutup').on('click', function() {
       if ($('.sukses').is('visible')) {
         window.location.href = "<?= current_url() . "?" . $_SERVER['QUERY_STRING']  ?>";

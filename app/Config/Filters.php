@@ -2,9 +2,9 @@
 
 namespace Config;
 
+
 use App\Filters\dontHaveSession;
 use App\Filters\haveSession;
-use App\Filters\loginFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -74,6 +74,9 @@ class Filters extends BaseConfig
             [
                 'Admin', 'Staff'
             ]
-        ]
+        ],
+        'haveSession' => ['before' => [
+            'Home'
+        ]]
     ];
 }

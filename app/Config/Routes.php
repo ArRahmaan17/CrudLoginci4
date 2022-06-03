@@ -31,11 +31,18 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/orderoffline/(:any)', 'Admin::cariidpesanan/$1');
-$routes->get('/admindashboard', 'Admin');
-$routes->get('/orderoffline', 'Admin::orderoffline');
-$routes->get('/pesananmasuk', 'Admin::pesananmasuk');
-$routes->get('/dashboard', 'Staff');
+$routes->get('/reset', 'Home::reset');
+$routes->get('/orderoffline/proses/(:any)', 'Admin::cariidpesanan/$1', ['filter' => 'dontHaveSession']);
+$routes->get('/orderoffline/selesai/(:any)', 'Admin::cariidpesanan/$1', ['filter' => 'dontHaveSession']);
+$routes->get('/orderoffline/editpesanan/(:any)', 'Admin::editorder/$1', ['filter' => 'dontHaveSession']);
+$routes->get('/orderoffline/tambahpesanan', 'Admin::tambahorder', ['filter' => 'dontHaveSession']);
+$routes->get('/admindashboard', 'Admin', ['filter' => 'dontHaveSession']);
+$routes->get('/orderoffline', 'Admin::orderoffline', ['filter' => 'dontHaveSession']);
+$routes->get('/barangmasuk', 'Admin::barangmasuk', ['filter' => 'dontHaveSession']);
+$routes->get('/barangmasuk/tambahbarang', 'Admin::tambahbarang', ['filter' => 'dontHaveSession']);
+$routes->get('/logout', 'Home::logout', ['filter' => 'dontHaveSession']);
+$routes->get('/pesananmasuk', 'Admin::pesananmasuk', ['filter' => 'dontHaveSession']);
+$routes->get('/dashboard', 'Staff', ['filter' => 'dontHaveSession']);
 $routes->get('/', 'Home', ['filter' => 'haveSession']);
 
 

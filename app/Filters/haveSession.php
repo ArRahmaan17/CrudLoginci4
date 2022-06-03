@@ -10,7 +10,7 @@ class haveSession implements FilterInterface
 {
   public function before(RequestInterface $request, $arguments = null)
   {
-    if (session()->get('role') === 'Admin' && (session()->get('status_login') === '1')) {
+    if (session()->get('role') === 'admin' && (session()->get('status_login') === '1')) {
       return redirect()->to(base_url('/admindashboard'));
     }elseif (session()->get('role') === 'Staff' && (session()->get('status_login') === '1')) {
       return redirect()->to(base_url('/dashboard'));

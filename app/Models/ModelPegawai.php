@@ -7,9 +7,9 @@ use CodeIgniter\Model;
 class ModelPegawai extends Model
 {
     protected $table            = 'pegawai';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'id_pegawai';
     protected $useAutoIncrement = true;
-    protected $allowedFields    = ['nama', 'email', 'password', 'bidang', 'alamat', 'jeniskelamin', 'role', 'status_login'];
+    protected $allowedFields    = ['nama_pegawai', 'email', 'password', 'bidang', 'alamat', 'jeniskelamin', 'role', 'status_login'];
 
 
     public function cari($katakunci)
@@ -23,10 +23,9 @@ class ModelPegawai extends Model
         }
         return $builder->findAll();
     }
-
     public function cariId($id)
     {
-        return $this->table("pegawai")->where("id", $id)->first();
+        return $this->table("pegawai")->where("id_pegawai", $id)->first();
     }
 
     public function statusLoginKosong()

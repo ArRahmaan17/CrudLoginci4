@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class BarangMigration extends Migration
+class PesananMigration extends Migration
 {
     public function up()
     {
@@ -16,30 +16,41 @@ class BarangMigration extends Migration
                 'auto_increment' => true,
             ],
             'nama'       => [
-                'type'       => 'VARCHAR',
-                'constraint' => '30',
+                'type'       => 'INT',
+            ],
+            'barang' => [
+                'type' => 'INT',
             ],
             'jumlah' => [
-                'type' => 'VARCHAR',
-                'constraint' => '8'
-            ],
-            'hargasatuan' => [
                 'type' => 'VARCHAR',
                 'constraint' => '10'
             ],
             'dimensi' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255'
+            ],
+            'fotoproses' => [
+                'type' => 'TEXT',
+            ],
+            'fotoselesai' => [
                 'type' => 'TEXT',
             ],
             'tanggalmasuk' => [
-                'type' => 'TEXT',
+                'type' => 'DATE',
             ],
+            'tanggalselesai' => [
+                'type' => 'DATE',
+            ],
+            'status' => [
+                'type' => 'TEXT',
+            ]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('barangmasuk');
+        $this->forge->createTable('pesanan');
     }
 
     public function down()
     {
-         $this->forge->dropTable('barangmasuk');
+        $this->forge->dropTable('pesanan');    
     }
 }

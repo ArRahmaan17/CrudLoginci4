@@ -4,16 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ModelBarang extends Model
+class ModelPelanggan extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'barang';
-    protected $primaryKey       = 'id_barang';
+    protected $table            = 'pelanggan';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nama_barang', 'dimensi_barang', 'kemasan'];
+    protected $allowedFields    = ['nama_pelanggan', 'nomer_pelanggan', 'password', 'status_pelanggan', 'alamat', 'jeniskelamin'];
 
 }

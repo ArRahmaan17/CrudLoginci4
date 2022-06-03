@@ -12,6 +12,7 @@ class BarangSeeder extends Seeder
         for ($i=0; $i < 50; $i++) { 
             $data = [
                 'nama' => $faker->name($gender = 'male'|'female'),
+                'penerima' => $faker->randomNumber(2, false),
                 'jumlah' => $faker->randomNumber(4, true),
                 'hargasatuan' => $faker->numerify('Rp.#####'),
                 'dimensi' => $faker->randomElement(['Lt','Kg','Pcs']),
